@@ -1,0 +1,24 @@
+{% extends "one_column_body.html" %}
+
+{% block body %}
+{% if user.is_authenticated() %}
+    <h3>{% trans %}Your accounts in social networks{% endtrans %}</h3>
+    {% for assoc in social_auth.associated %}
+    <li>{{ assoc.provider|title }} {{ assoc.uid }}
+       {% if social_auth.associated|length > 1 %} <a href="{% url 'socialauth_disconnect' assoc.provider %}">{% trans %}disconnect{% endtrans %}</a>{% endif %}
+    </li>
+    {% else %}
+        <li>{% trans %}You don't have connections to social networks yet{% endtrans %}</li>
+    {% endfor %}
+    <h3>{% trans %}Connect your profile to accounts in social networks{% endtrans %}</h3>
+{% else %}
+    <h3>{% trans %}Sign in with the help of your favorite social network{% endtrans %}</h3>
+{% endif %}
+
+
+    <div class="span6">
+{% include 'django_soclogin/_social_auth_refs.html'  %}
+    </div>
+
+
+{% endblock body %}

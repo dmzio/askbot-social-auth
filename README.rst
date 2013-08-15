@@ -1,3 +1,12 @@
+===================================
+Fork of Askbot with changed signup
+===================================
+
+Uses django-social-auth except builtin user authentication.
+
+Integrated in the simplest way.
+
+
 ===================
 Askbot - Q&A forum
 ===================

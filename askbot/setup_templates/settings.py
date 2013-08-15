@@ -154,6 +154,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'askbot.context.application_settings',
     #'django.core.context_processors.i18n',
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
     'askbot.user_messages.context_processors.user_messages',#must be before auth
     'django.contrib.auth.context_processors.auth', #this is required for admin
     'django.core.context_processors.csrf', #necessary for csrf protection
@@ -177,7 +180,8 @@ INSTALLED_APPS = (
     #'debug_toolbar',
     #'haystack',
     'askbot',
-    'askbot.deps.django_authopenid',
+    'social_auth',
+    'askbot.deps.django_soclogin',
     #'askbot.importers.stackexchange', #se loader
     'south',
     'askbot.deps.livesettings',
@@ -207,8 +211,28 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    #'social_auth.backends.google.GoogleOAuthBackend',
+    #'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
+    #'social_auth.backends.yahoo.YahooBackend',
+    #'social_auth.backends.browserid.BrowserIDBackend',
+    #'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    #'social_auth.backends.contrib.disqus.DisqusBackend',
+    'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    #'social_auth.backends.contrib.orkut.OrkutBackend',
+    #'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    #'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.vk.VKOAuth2Backend',
+    #'social_auth.backends.contrib.live.LiveBackend',
+    #'social_auth.backends.contrib.skyrock.SkyrockBackend',
+    #'social_auth.backends.contrib.yahoo.YahooOAuthBackend',
+    #'social_auth.backends.contrib.readability.ReadabilityBackend',
+    #'social_auth.backends.contrib.fedora.FedoraBackend',
+    'social_auth.backends.OpenIDBackend',
+    'social_auth.backends.contrib.yandex.YandexBackend',
     'django.contrib.auth.backends.ModelBackend',
-    'askbot.deps.django_authopenid.backends.AuthBackend',
 )
 
 #logging settings
@@ -230,6 +254,7 @@ ASKBOT_TRANSLATE_URL = True #translate specific URLs
 _ = lambda v:v #fake translation function for the login url
 LOGIN_URL = '/%s%s%s' % (ASKBOT_URL,_('account/'),_('signin/'))
 LOGIN_REDIRECT_URL = ASKBOT_URL #adjust if needed
+LOGIN_ERROR_URL = LOGIN_URL
 #note - it is important that upload dir url is NOT translated!!!
 #also, this url must not have the leading slash
 ALLOW_UNICODE_SLUGS = False

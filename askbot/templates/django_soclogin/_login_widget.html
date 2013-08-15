@@ -1,0 +1,6 @@
+{%- if request.user.is_authenticated() -%}
+<a href="{% url 'user_signin' %}" title="{% trans %}Manage social network connections{% endtrans %}">{% trans %}login options{% endtrans %}</a>
+<a href="{% url 'logout' %}?next={{ settings.LOGOUT_REDIRECT_URL }}">{% trans %}sign out{% endtrans %}</a>
+{% else %}
+<a href="{% url 'user_signin' %}" >{% trans %}Login{% endtrans %}</a>
+{% endif %}
