@@ -12,15 +12,15 @@
 {% endif %}
     {% if answer %}
         <div class="message">
-        {% trans title=answer.question.title|escape, summary=answer.summary|escape %}
-        Your answer to {{title}} {{summary}} will be posted once you log in
+        {% trans title=answer.question.title|escape %}
+        Your answer to {{title}} will be posted once you log in
         {% endtrans %}
         </div>
     {% endif %}
     {% if question %}
         <div class="message">
-        {% trans title=question.title|escape, summary=question.summary|escape %}Your question 
-        {{title}} {{summary}} will be posted once you log in
+        {% trans title=question.title|escape %}Your question 
+        {{title}} will be posted once you log in
         {% endtrans %}
         </div>
     {% endif %}
@@ -53,6 +53,9 @@
             wants to always show the password login form - then
             the button is useless.
         #}
+        {% if 'in_recovery' in request.session %}
+            <input type="hidden" name="in_recovery" value="true" />
+        {% endif %}
         {{ login_form.login_provider_name }}
         {{ login_form.next }}
         {{ 
@@ -112,7 +115,7 @@
                     </tr>
                 </table>
                 <p id="local_login_buttons">
-                    <input class="submit" name="login_with_password" type="submit" value="{% trans %}Sign in{% endtrans %}" />
+                    <input class="button" name="login_with_password" type="submit" value="{% trans %}Sign in{% endtrans %}" />
                     {% if settings.USE_LDAP_FOR_PASSWORD_LOGIN == False %}
                     <a class="create-password-account" style="vertical-align:middle" href="{% url user_signup_with_password %}?login_provider=local">{% trans %}Create a password-protected account{% endtrans %}</a>
                     {% endif %}
@@ -127,8 +130,8 @@
                         <td>
                             {{login_form.new_password}}
                         </td>
-                        <td>
-                            <span class="error">{{login_form.new_password.errors[0]}}</span>
+                        <td style="text-align: left">
+                            <span class="error new-password-errors">{{login_form.new_password.errors[0]}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -136,13 +139,13 @@
                         <td>
                             {{login_form.new_password_retyped}}
                         </td>
-                        <td>
-                            <span class="error">{{login_form.new_password_retyped.errors[0]}}</span>
+                        <td style="text-align: left">
+                            <span class="error new-password-retyped-errors">{{login_form.new_password_retyped.errors[0]}}</span>
                         </td>
                     </tr>
                 </table>
                 <p id="local_login_buttons">
-                    <input class="submit" name="change_password" type="submit" value="{% trans %}Change password{% endtrans %}" />
+                    <input class="button" name="change_password" type="submit" value="{% trans %}Change password{% endtrans %}" />
                 </p>
             {% endif %}
         </fieldset>
@@ -196,9 +199,9 @@
             <p class="hint">
                 <span class="text">
                 {% if view_subtype == 'bad_key' %}
-                    {% trans %}Please, enter your email address below and obtain a new key{% endtrans %}
+                    {% trans %}Enter your email address below and obtain a new key{% endtrans %}
                 {% else %}
-                    {% trans %}Please, enter your email address below to recover your account{% endtrans %}
+                    {% trans %}Enter your email address below to recover your account{% endtrans %}
                 {% endif %}
                 </span>
                 <span style="display:none" class="link"> - <a href="#">{% trans %}recover your account via email{% endtrans %}</a></span>
@@ -210,7 +213,7 @@
                 {{ account_recovery_form.email }}
                 <input
                     type="submit"
-                    class="submit"
+                    class="button"
                     {% if view_subtype == 'bad_key' %}
                     value="{% trans %}Send a new recovery key{% endtrans %}"
                     {% else %}
